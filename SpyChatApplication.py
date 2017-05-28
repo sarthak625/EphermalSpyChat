@@ -14,9 +14,9 @@ def welcome(name,age,salutation,rating):
 	#Print appropriate message according to the spy rating
 	if rating >= 4.5:
 		verdict = "Wow! You are such an awesome spy xO "
-	elif 4.5>rating >= 3.5:
+	elif rating<4.5 and rating >= 3.5:
 		verdict = "You are cool. :)"
-	elif 3.5>rating>=2.5:
+	elif rating<3.5 and rating>=2.5:
 		verdict = "Mehh! Keep working hard spy. You still have a long way to go!"
 	else:
 		verdict = "Beta. Tumse naa ho paaega!"
@@ -49,15 +49,15 @@ if is_new_user == 'y' or is_new_user == 'Y':
 		spy_age = int(raw_input("What is your age? "))
 
 		#If the spy age is invalid, then exit the program
-		if 12<spy_age>50:
-			print "Sorry! But we cant accept you to our spy company :( Bbyee"
+		if spy_age<12 or spy_age>50:
+			print "Sorry! But we cant accept you to our spy organization :( Bbyee"
 			sys.exit()
 
 		#Get the rating of the spy as a float value
 		spy_rating = float(raw_input("How would you rate yourself as a spy? "))
 
 		#Check if the spy_rating is valid
-		if 0>spy_rating>5.0:
+		if spy_age<0 or spy_rating>5.0:
 			print "Thats not a valid spy_rating!!!!"
 		
 		#Greet the spy
