@@ -1,6 +1,14 @@
 import default_spy
 import sys
 
+#Define the variables required as global
+spy_name = ""
+spy_salutation = ""
+spy_rating = 0
+spy_age = 0
+status_messages = []
+
+# Functions ----
 #A function to welcome the spy with a cool message
 def welcome(name,age,salutation,rating):
 	print "********************************"
@@ -23,14 +31,45 @@ def welcome(name,age,salutation,rating):
 
 	print "Verdict = "+verdict
 	print "============================" 
-		
-#Define the variables required as global
-spy_name = ""
-spy_salutation = ""
-spy_rating = 0
-spy_age = 0
 
+#A function to add status
+def add_status(status_message):
+	#If there aren't any previous status messages enter a new one
+	if status_messages == []:
+		status_message = raw_input("You dont have any previous statuses. Enter a new status for the spy: ")
+		status_messages.append(status_message)
+	#Else get a choice from the previous status messages
+	else:
+		while True:
+			choice = raw_input("Do you want to chose from a previous list of statuses? Enter y/n : ")
+			#Choose from previous messages
+			if choice.lower() == 'y':
+				while True:
+					print "Your previous messages are : "
+					i = 0
+					for message in status_messages:
+						print str(i+1)+" ) "+message
+						i+=1
 
+					message_choice = int(raw_input("Enter your choice: "))
+
+					if message_choice <= len(status_messages):
+						status_message = status_messages[message_choice-1]
+						break
+					else:
+						print "There is no option "+str(message_choice)+" . You need spy goggles. Here! Try Again!"
+				break
+
+			elif choice.lower() == 'n':
+				status_message = raw_input("Enter a status for the spy: ")
+				status_messages.append(status_message)
+				break
+			else:
+				print "Thats not an option. Try Again!!"
+
+	print "Your current status is "+status_message
+	return status_message
+	
 
 #Ask the user whether to add a new spy or continue with the default one
 is_new_user = raw_input("Do you want to add a new spy? Enter y or n :")
@@ -111,7 +150,8 @@ while True:
 	print "You chose "+str(choice)
 
 	if choice == 1:
-		pass
+		current_status_message = None
+		current_status_message = add_status(current_status_message);
 	elif choice == 2:
 		pass
 	elif choice == 3:
