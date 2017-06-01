@@ -1,5 +1,6 @@
 import default_spy
 import sys
+from steganography.steganography import Steganography
 
 #Define the variables required as global
 spy_name = ""
@@ -7,6 +8,12 @@ spy_salutation = ""
 spy_rating = 0
 spy_age = 0
 status_messages = []
+friend_list = {
+	"friend_name": [],
+	"friend_age": [],
+	"friend_rating": []
+}
+
 
 # Functions ----
 #A function to welcome the spy with a cool message
@@ -70,6 +77,51 @@ def add_status(status_message):
 	print "Your current status is "+status_message
 	return status_message
 	
+
+#A function to add a friend
+def add_friend():
+	friend_name=""
+	friend_age=0
+	friend_rating=0.0
+
+	while True:
+		friend_name = raw_input("Enter the name of your friend: ")
+		if len(friend_name)==0:
+			print "You must type something. Enter a name!! Try again."
+		else:
+			break
+
+	
+	while True:
+		friend_age = int(raw_input("Enter the age of your friend: "))
+		if friend_age < 12 :
+			print "Sorry, we cant add your friend because he is too young to be a spy. :("
+			return
+		else:
+			break
+
+		
+	while True:
+		friend_rating = float(raw_input("Enter the rating of your friend: "))
+		if friend_rating<0.0 or friend_rating>5.0:
+			print "That rating is invalid. Enter a valid rating between 0 and 5 for your friend."
+		else:
+			break
+
+	friend_list["friend_name"].append(friend_name)
+	friend_list["friend_rating"].append(friend_rating)
+	friend_list["friend_age"].append(friend_age)
+
+#A function to display friend list
+def display_friends():
+	n = len(friend_list["friend_name"])
+
+	for i in range(0,n):
+		print "============= Friend "+str(i+1)+" ============= "
+		print "Name: "+friend_list["friend_name"][i]
+		print "Age: "+str(friend_list["friend_age"][i])
+		print "Rating: "+str(friend_list["friend_rating"][i])
+
 
 #Ask the user whether to add a new spy or continue with the default one
 is_new_user = raw_input("Do you want to add a new spy? Enter y or n :")
@@ -150,11 +202,14 @@ while True:
 	print "You chose "+str(choice)
 
 	if choice == 1:
+		#Add a status update
 		current_status_message = None
 		current_status_message = add_status(current_status_message);
 	elif choice == 2:
-		pass
+		add_friend()
+		display_friends()
 	elif choice == 3:
+		#Send a secret message
 		pass
 	elif choice == 4:
 		pass
