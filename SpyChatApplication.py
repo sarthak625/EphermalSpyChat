@@ -18,7 +18,6 @@ path = ""
 output = ""
 message = ""
 
-
 # Functions ----
 #A function to welcome the spy with a cool message
 def welcome(name,age,salutation,rating):
@@ -81,8 +80,7 @@ def add_status(status_message):
 	print "Your current status is "+status_message
 	return status_message
 	
-
-#A function to add a friend
+#A function to add a friend and return the friend count
 def add_friend():
 	friend_name=""
 	friend_age=0
@@ -112,9 +110,12 @@ def add_friend():
 		else:
 			break
 
+	#Add a friend when all three properties of a friend are valid
 	friend_list["friend_name"].append(friend_name)
 	friend_list["friend_rating"].append(friend_rating)
 	friend_list["friend_age"].append(friend_age)
+	
+	return len(friend_list["friend_name"])
 
 #A function to display friend list
 def display_friends():
@@ -210,7 +211,8 @@ while True:
 		current_status_message = add_status(current_status_message);
 	
 	elif choice == 2:
-		add_friend()
+		count = add_friend()
+		print "You now have "+str(count)+" friends"
 		display_friends()
 	
 	elif choice == 3:
