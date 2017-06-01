@@ -13,6 +13,10 @@ friend_list = {
 	"friend_age": [],
 	"friend_rating": []
 }
+#variables for image decoding and encoding 
+path = ""	
+output = ""
+message = ""
 
 
 # Functions ----
@@ -210,7 +214,32 @@ while True:
 		display_friends()
 	elif choice == 3:
 		#Send a secret message
-		pass
+		
+		while True:
+			path = raw_input("Enter the full path to the target image(eg. D:\\target.jpg): ")
+			confirm = raw_input("Press y to confirm: ")
+			if confirm.lower() == 'y':
+				break
+
+		while True:
+			path = raw_input("Enter the full path to the output image(eg. D:\\output.jpg): ")
+			confirm = raw_input("Press y to confirm: ")
+			if confirm.lower() == 'y':
+				break
+
+		while True:
+			message = raw_input("Enter the message you want to encrypt: ")
+			if len(message) !=0:
+				break
+			else:
+				print "You didn't enter anything. Try Again!"
+
+		Steganography.encode(path, output_path, text)
+
+
+
+
+
 	elif choice == 4:
 		pass
 	elif choice == 5:
