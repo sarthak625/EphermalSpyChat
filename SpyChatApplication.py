@@ -76,7 +76,7 @@ def add_status(status_message):
 				status_messages.append(status_message)
 				break
 			else:
-				print "Thats not an option. Try Again!!"
+				print "You had two simple buttons to press, y or n. Go try again you dummy -_- "
 
 	print "Your current status is "+status_message
 	return status_message
@@ -201,7 +201,6 @@ while True:
 	print "4) Read a secret message"
 	print "5) Read chats from a user"
 	print "6) Close application"
-
 	choice = int(raw_input("Enter your choice: "))
 	print "You chose "+str(choice)
 
@@ -209,39 +208,42 @@ while True:
 		#Add a status update
 		current_status_message = None
 		current_status_message = add_status(current_status_message);
+	
 	elif choice == 2:
 		add_friend()
 		display_friends()
+	
 	elif choice == 3:
 		#Send a secret message
-		
 		while True:
 			path = raw_input("Enter the full path to the target image(eg. D:\\target.jpg): ")
 			confirm = raw_input("Press y to confirm: ")
 			if confirm.lower() == 'y':
 				break
-
 		while True:
-			path = raw_input("Enter the full path to the output image(eg. D:\\output.jpg): ")
+			output = raw_input("Enter the full path to the output image(eg. D:\\output.jpg): ")
 			confirm = raw_input("Press y to confirm: ")
 			if confirm.lower() == 'y':
 				break
-
 		while True:
 			message = raw_input("Enter the message you want to encrypt: ")
 			if len(message) !=0:
 				break
 			else:
 				print "You didn't enter anything. Try Again!"
-
-		Steganography.encode(path, output_path, text)
-
-
-
-
+		
+		print "Encoding..............."
+		print "Sit back and relax spy because this may take a while B-)"
+		Steganography.encode(path, output, message)
+		print "Encoding complete!!"
 
 	elif choice == 4:
-		pass
+		output_image = raw_input("Enter the full path to the output image(eg. D:\\output.jpg): ")
+		print "The secret message is!!!!"
+		print "Wait for it................"
+		secret_text = Steganography.decode(output_image)
+		print "============================================="
+		print secret_text
 	elif choice == 5:
 		pass
 	elif choice == 6:
