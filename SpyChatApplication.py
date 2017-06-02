@@ -127,6 +127,20 @@ def display_friends():
 		print "Age: "+str(friend_list["friend_age"][i])
 		print "Rating: "+str(friend_list["friend_rating"][i])
 
+def select_friend():
+	display_friends()
+	while True:
+		index = int(raw_input("Enter which friend do you want to select: "))
+		print len(friend_list["friend_name"])
+		if index>len(friend_list["friend_name"]) or index<0:
+			print "There is no Friend "+str(index)+" .You need to try again!"
+		else:
+			break
+	print "You chose Friend "+str(index)+" =============  "
+	print "Name: "+friend_list["friend_name"][index-1]
+	print "Age: "+str(friend_list["friend_age"][index-1])
+	print "Rating: "+str(friend_list["friend_rating"][index-1])
+	return index-1
 
 #Ask the user whether to add a new spy or continue with the default one
 is_new_user = raw_input("Do you want to add a new spy? Enter y or n :")
@@ -213,7 +227,8 @@ while True:
 	elif choice == 2:
 		count = add_friend()
 		print "You now have "+str(count)+" friends"
-		display_friends()
+		select_friend_index = select_friend()
+		print "You have selected Friend "+str(select_friend_index+1)
 	
 	elif choice == 3:
 		#Send a secret message
