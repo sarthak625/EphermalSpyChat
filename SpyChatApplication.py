@@ -2,17 +2,42 @@ import default_spy
 import sys
 from steganography.steganography import Steganography
 
+#Instance variables
 #Define the variables required as global
 spy_name = ""
 spy_salutation = ""
 spy_rating = 0
 spy_age = 0
 status_messages = []
+
+friend_count = 0 		#A global variable to keep track of friends
+class friend:
+	def __init__(self,friend_name,friend_age,friend_rating):
+		self.friend_name = friend_name
+		self.friend_age = friend_age
+		self.friend_rating = friend_rating
+		global friend_count
+		friend_count+=1
+
+
+"""
+# The dictionaries which are replaced by classes    --> Objective No. (Total Objectives - 6)
+
 friend_list = {
 	"friend_name": [],
 	"friend_age": [],
-	"friend_rating": []
+	"friend_rating": [],
+	"friend_chats":[]
 }
+chats = {
+	"to" :  [],
+	"message": []
+}
+
+"""
+#We still need the friend_list to contain a list of friend objects
+friend_list_obj = []
+
 #variables for image decoding and encoding 
 path = ""	
 output = ""
@@ -40,7 +65,8 @@ def welcome(name,age,salutation,rating):
 		verdict = "Beta. Tumse naa ho paaega!"
 
 	print "Verdict = "+verdict
-	print "============================" 
+	print "============================"
+	raw_input("Press enter to continue.")
 
 #A function to add status
 def add_status(status_message):
@@ -78,10 +104,13 @@ def add_status(status_message):
 				print "You had two simple buttons to press, y or n. Go try again you dummy -_- "
 
 	print "Your current status is "+status_message
+	raw_input("Press enter to continue.")
 	return status_message
 	
 #A function to add a friend and return the friend count
 def add_friend():
+	
+	
 	friend_name=""
 	friend_age=0
 	friend_rating=0.0
@@ -111,37 +140,113 @@ def add_friend():
 			break
 
 	#Add a friend when all three properties of a friend are valid
+	"""
 	friend_list["friend_name"].append(friend_name)
 	friend_list["friend_rating"].append(friend_rating)
 	friend_list["friend_age"].append(friend_age)
-	
-	return len(friend_list["friend_name"])
+	"""
+
+	new_friend = friend(friend_name,friend_age,friend_rating)
+	friend_list_obj.append(new_friend)
+	print friend_name+" was added successfully. "
+	raw_input("Press enter to continue.")
+	#return len(friend_list["friend_name"])
+	return friend_count
 
 #A function to display friend list
 def display_friends():
+	"""
+	#Uncomment this for dictionaries
+
 	n = len(friend_list["friend_name"])
 
-	for i in range(0,n):
-		print "============= Friend "+str(i+1)+" ============= "
-		print "Name: "+friend_list["friend_name"][i]
-		print "Age: "+str(friend_list["friend_age"][i])
-		print "Rating: "+str(friend_list["friend_rating"][i])
+	if n==0:
+		print "There are no friends in your list currently :("
+		print "Ohh! Dont worry, go to the menu and add one. Its easy to make friends :)"
+		raw_input("Press enter to continue.")
+	else:
+		for i in range(0,n):
+			print "============= Friend "+str(i+1)+" ============= "
+			print "Name: "+friend_list["friend_name"][i]
+			print "Age: "+str(friend_list["friend_age"][i])
+			print "Rating: "+str(friend_list["friend_rating"][i])
+		raw_input("Press enter to continue.")
+	return n
+	"""
+	#for classes and objects
+	if (friend_count==0):
+		print "There are no friends in your list currently :("
+		print "Ohh! Dont worry, go to the menu and add one. Its easy to make friends :)"
+		raw_input("Press enter to continue.")
+	else:
+		for i in range(0,len(friend_list_obj)):
+			print "============= Friend "+str(i+1)+" ============= "
+			print "Name: "+friend_list_obj[i].friend_name
+			print "Age: "+str(friend_list_obj[i].friend_age)
+			print "Rating: "+str(friend_list_obj[i].friend_rating)
+		raw_input("Press enter to continue.")
+	return friend_count	
 
+
+#A function to select a friend fron=m the list
 def select_friend():
-	display_friends()
+	n = display_friends()
+	if n==0:
+		return -1		#There are no friends
 	while True:
 		index = int(raw_input("Enter which friend do you want to select: "))
-		print len(friend_list["friend_name"])
-		if index>len(friend_list["friend_name"]) or index<0:
+		#print len(friend_list["friend_name"])
+		print friend_count
+		#if index>len(friend_list["friend_name"]) or index<0:
+		if index>friend_count or index<0:
 			print "There is no Friend "+str(index)+" .You need to try again!"
 		else:
 			break
 	print "You chose Friend "+str(index)+" =============  "
-	print "Name: "+friend_list["friend_name"][index-1]
-	print "Age: "+str(friend_list["friend_age"][index-1])
-	print "Rating: "+str(friend_list["friend_rating"][index-1])
+	#print "Name: "+friend_list["friend_name"][index-1]
+	#print "Age: "+str(friend_list["friend_age"][index-1])
+	#print "Rating: "+str(friend_list["friend_rating"][index-1])
+	print "Name: "+friend_list_obj[index-1].friend_name
+	print "Age: "+str(friend_list_obj[index-1].friend_age)
+	print "Rating: "+str(friend_list_obj[index-1].friend_rating)
+
+	raw_input("Press enter to continue.")
 	return index-1
 
+#A function to send an encoded message to a friend
+def send_a_message():
+	print "You need to select a friend you want to send the message to."
+	n = select_friend()
+	if n == -1:			#Function will not run if there are no friends
+		return
+	while True:
+		path = raw_input("Enter the full path to the target image(eg. D:\\target.jpg): ")
+		confirm = raw_input("Press y to confirm: ")
+		if confirm.lower() == 'y':
+			break
+	while True:
+		output = raw_input("Enter the full path to the output image(eg. D:\\output.jpg): ")
+		confirm = raw_input("Press y to confirm: ")
+		if confirm.lower() == 'y':
+			break
+	while True:
+		message = raw_input("Enter the message you want to encrypt: ")
+		if len(message) !=0:
+			break
+		else:
+			print "You didn't enter anything. Try Again!"
+		
+	try:
+		print "Encoding..............."
+		print "Sit back and relax spy because this may take a while B-)"
+		Steganography.encode(path, output, message)
+		print "Encoding complete!!"
+		raw_input("Press enter to continue.")
+	except IOError:
+		print "Oh! Oh! Looks like the file name you provided wasn't quite right. Try Again!!"
+
+
+#Main program-----
 #Ask the user whether to add a new spy or continue with the default one
 is_new_user = raw_input("Do you want to add a new spy? Enter y or n :")
 
@@ -225,42 +330,28 @@ while True:
 		current_status_message = add_status(current_status_message);
 	
 	elif choice == 2:
-		count = add_friend()
-		print "You now have "+str(count)+" friends"
-		select_friend_index = select_friend()
-		print "You have selected Friend "+str(select_friend_index+1)
+		add_friend()
+		print "You now have "+str(friend_count)+" friends"
+		#select_friend_index = select_friend()
+		#print "You have selected Friend "+str(select_friend_index+1)
 	
 	elif choice == 3:
 		#Send a secret message
-		while True:
-			path = raw_input("Enter the full path to the target image(eg. D:\\target.jpg): ")
-			confirm = raw_input("Press y to confirm: ")
-			if confirm.lower() == 'y':
-				break
-		while True:
-			output = raw_input("Enter the full path to the output image(eg. D:\\output.jpg): ")
-			confirm = raw_input("Press y to confirm: ")
-			if confirm.lower() == 'y':
-				break
-		while True:
-			message = raw_input("Enter the message you want to encrypt: ")
-			if len(message) !=0:
-				break
-			else:
-				print "You didn't enter anything. Try Again!"
-		
-		print "Encoding..............."
-		print "Sit back and relax spy because this may take a while B-)"
-		Steganography.encode(path, output, message)
-		print "Encoding complete!!"
+		send_a_message()
 
 	elif choice == 4:
+		
 		output_image = raw_input("Enter the full path to the output image(eg. D:\\output.jpg): ")
 		print "The secret message is!!!!"
 		print "Wait for it................"
-		secret_text = Steganography.decode(output_image)
-		print "============================================="
-		print secret_text
+		try:
+			secret_text = Steganography.decode(output_image)
+			print "============================================="
+			print secret_text
+		except TypeError:
+			print "The file which you provided is not encrypted."
+		except IOError:
+			print "File not found"
 	elif choice == 5:
 		pass
 	elif choice == 6:
