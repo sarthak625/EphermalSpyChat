@@ -1,6 +1,7 @@
 import default_spy
 import sys
 from steganography.steganography import Steganography
+from termcolor import colored,cprint
 from datetime import datetime
 
 #Instance variables
@@ -135,8 +136,11 @@ def add_friend():
 	
 	while True:
 		friend_age = int(raw_input("Enter the age of your friend: "))
-		if friend_age < 12 :
+		if friend_age < 12:
 			print "Sorry, we cant add your friend because he is too young to be a spy. :("
+			return
+		elif friend_age>50:
+			print "Sorry, we cant add your friend because he is too old to be a spy. :("
 			return
 		else:
 			break
@@ -207,7 +211,7 @@ def select_friend():
 	if n==0:
 		return -1		#There are no friends
 	while True:
-		index = int(raw_input("Enter which friend do you want to select: "))
+		index = int(raw_input("Enter the number of the friend you want to select: "))
 		#print len(friend_list["friend_name"])
 		#print friend_count
 		#if index>len(friend_list["friend_name"]) or index<0:
@@ -228,20 +232,27 @@ def select_friend():
 
 #A function to send an encoded message to a friend
 def send_a_message():
-	print "You need to select a friend you want to send the message to."
+	print "You need to select a friend you want to send the message to. Enter friend number: "
 	n = select_friend()
 	if n == -1:			#Function will not run if there are no friends
 		return
 	while True:
 		path = raw_input("Enter the full path to the target image(eg. D:\\target.jpg): ")
-		confirm = raw_input("Press y to confirm: ")
-		if confirm.lower() == 'y':
-			break
+		if (len(path) == 0):
+			print "You need to enter something."
+		else:
+			confirm = raw_input("Press y to confirm: ")
+			if confirm.lower() == 'y':
+				break
+
 	while True:
 		output = raw_input("Enter the full path to the output image(eg. D:\\output.jpg): ")
-		confirm = raw_input("Press y to confirm: ")
-		if confirm.lower() == 'y':
-			break
+		if (len(output) == 0):
+			print "You need to enter something."
+		else:
+			confirm = raw_input("Press y to confirm: ")
+			if confirm.lower() == 'y':
+				break
 	while True:
 		message = raw_input("Enter the message you want to encrypt: ")
 		if len(message) !=0:
@@ -266,7 +277,7 @@ def send_a_message():
 
 #A method which calls the select_a_friend method to get which friend is to be communicated with.
 def read_a_message():
-	print "You need to select a friend whose messages you want to read: "
+	print "You need to select a friend whose messages you want to read. Enter friend number: "
 	n = select_friend()
 	
 	if n == -1:			#Function will not run if there are no friends
@@ -293,6 +304,7 @@ def read_a_message():
 			print "A painful DEAAAAAATTTTTHHHHHHHHHHHHHH!!!!!!!!!!!!!!!!!!......"
 			print "Throw him to the hounds..................."
 			#Remove the spy from the list
+			raw_input(" Spy eliminated.....Press enter to continue. ")
 			friend_list_obj.remove(friend_list_obj[n])
 			return
 
@@ -306,8 +318,8 @@ def read_a_message():
 			print "Triangulating the spies location. "
 			raw_input("Hit the enter button to send a missile at coordinates (alpha,tango,zulu,alpha) ")
 			raw_input("Yay! You saved the day. Press enter to move on with swag. ")
-		else if (secret_text.lower().count("valar morghulis")>0):
-			print "-!-!-!-  Valar dohaerys -!-!-!-!- "
+		elif (secret_text.lower().count("valar morghulis")>0):
+			raw_input("-!-!-!-  Valar dohaerys -!-!-!-!- ")
 
 		#Append the message to the chat dictionary of the friend
 		friend_list_obj[n].chat_dict["message_value"].append(secret_text)
@@ -333,12 +345,13 @@ def read_chat():
 	count = 0
 	for i in range(0,len(friend_list_obj[n].chat_dict["message_value"])):
 		print "--------------- MESSAGE #"+str(i+1)+" ---------------"
-		print "Message : "+friend_list_obj[n].chat_dict["message_value"][i]
-		print "Time : "+friend_list_obj[n].chat_dict["message_time"][i]
+		print "Message : "+colored(friend_list_obj[n].chat_dict["message_value"][i],"grey") 
+		#Note --> I used the grey color as termcolor does not accept black color as a key and the closest color to black is grey
+		print "Time : "+colored(friend_list_obj[n].chat_dict["message_time"][i],"blue")
 		if friend_list_obj[n].chat_dict["message_by_me"][i]:
-			print "To: Agent "+spy_name
+			print "To: Agent "+colored(spy_name,"red")
 		else:
-			print "From: Agent "+spy_name
+			print "From: Agent "+colored(spy_name,"red")
 		print "---------------------------------------------"
 		count+=1
 
