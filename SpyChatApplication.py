@@ -1,6 +1,7 @@
 import default_spy
 import sys
 from steganography.steganography import Steganography
+from datetime import datetime
 
 #Instance variables
 #Define the variables required as global
@@ -18,10 +19,18 @@ class friend:
 		self.friend_rating = friend_rating
 		global friend_count
 		friend_count+=1
+	# A dictionary to store all the chat records
+	chat_dict = {
+	"message_value": [],
+	"message_time": [],
+	"message_by_me": []
+	}
+
+
 
 
 """
-# The dictionaries which are replaced by classes    --> Objective No. (Total Objectives - 6)
+# The dictionaries which are replaced by classes    --> Objective No.=> [(Total Objectives - 6)]
 
 friend_list = {
 	"friend_name": [],
@@ -241,9 +250,41 @@ def send_a_message():
 		print "Sit back and relax spy because this may take a while B-)"
 		Steganography.encode(path, output, message)
 		print "Encoding complete!!"
+		#Add the message along with time and boolean value to the chats dictionary
+		friend_list_obj[n-1].chat_dict["message_value"].append(message)
+		friend_list_obj[n-1].chat_dict["message_time"].append(datetime.now().strftime("%H:%M:%S"))		
+		friend_list_obj[n-1].chat_dict["message_by_me"].append(False);
 		raw_input("Press enter to continue.")
 	except IOError:
 		print "Oh! Oh! Looks like the file name you provided wasn't quite right. Try Again!!"
+
+
+#A method which calls the select_a_friend method to get which friend is to be communicated with.
+def read_a_message():
+	print "You need to select a friend to communicate with "
+	n = select_friend()
+	if n == -1:			#Function will not run if there are no friends
+		return
+	while True:
+		output_image = raw_input("Enter the full path to the image(eg. D:\\output.jpg): ")
+		confirm = raw_input("Press y to confirm: ")
+		if confirm.lower() == 'y':
+			break
+	print "The secret message from Agent "+friend_list_obj[n-1].friend_name+" is: "
+	print "Wait for it................"
+	try:
+		secret_text = Steganography.decode(output_image)
+		print "============================================="
+		print secret_text
+	except TypeError:
+		print "The file which you provided is not encrypted."
+	except IOError:
+		print "File not found"
+
+	friend_list_obj[n-1].chat_dict["message_value"].append(secret_text)
+	friend_list_obj[n-1].chat_dict["message_time"].append(datetime.now().strftime("%H:%M:%S"))		
+	friend_list_obj[n-1].chat_dict["message_by_me"].append(True);
+
 
 
 #Main program-----
@@ -342,17 +383,9 @@ while True:
 	elif choice == 4:
 		
 		output_image = raw_input("Enter the full path to the output image(eg. D:\\output.jpg): ")
-		print "The secret message is!!!!"
-		print "Wait for it................"
-		try:
-			secret_text = Steganography.decode(output_image)
-			print "============================================="
-			print secret_text
-		except TypeError:
-			print "The file which you provided is not encrypted."
-		except IOError:
-			print "File not found"
+		
 	elif choice == 5:
+		read_a_message()
 		pass
 	elif choice == 6:
 		print "============================"
