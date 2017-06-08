@@ -266,15 +266,18 @@ def send_a_message():
 
 #A method which calls the select_a_friend method to get which friend is to be communicated with.
 def read_a_message():
-	print "You need to select a friend to communicate with "
+	print "You need to select a friend whose messages you want to read: "
 	n = select_friend()
+	
 	if n == -1:			#Function will not run if there are no friends
 		return
+	
 	while True:
 		output_image = raw_input("Enter the full path to the image(eg. D:\\output.jpg): ")
 		confirm = raw_input("Press y to confirm: ")
 		if confirm.lower() == 'y':
 			break
+
 	print "The secret message from Agent "+friend_list_obj[n].friend_name+" is: "
 	print "Wait for it................"
 	try:
@@ -282,8 +285,29 @@ def read_a_message():
 		print "============================================="
 		print secret_text
 		#Count the number of words spoken by the spy
-		friend_list_obj[n].words = secret_text.count(' ')+1 
+		friend_list_obj[n].words = secret_text.count(' ')+1
+		
+		#If the spy talks too much
+		if (friend_list_obj[n].words > 100):
+			print "Oh shut up spy! The penalty of speaking too much is..."
+			print "A painful DEAAAAAATTTTTHHHHHHHHHHHHHH!!!!!!!!!!!!!!!!!!......"
+			print "Throw him to the hounds..................."
+			#Remove the spy from the list
+			friend_list_obj.remove(friend_list_obj[n])
+			return
+
 		#The number of words spoken by a spy will be equal to the number of whitespaces+1
+
+		#If the spy sends some special characters
+		if ((secret_text.lower().count("sos")>0) or (secret_text.lower().count("save me")>0)):
+			print "Looks like Agent "+friend_list_obj[n].friend_name+" is in trouble...."
+			print "Its spy law that you must help him. "
+			print "-----------------Initiating Weapon X----------------"
+			print "Triangulating the spies location. "
+			raw_input("Hit the enter button to send a missile at coordinates (alpha,tango,zulu,alpha) ")
+			raw_input("Yay! You saved the day. Press enter to move on with swag. ")
+		else if (secret_text.lower().count("valar morghulis")>0):
+			print "-!-!-!-  Valar dohaerys -!-!-!-!- "
 
 		#Append the message to the chat dictionary of the friend
 		friend_list_obj[n].chat_dict["message_value"].append(secret_text)
@@ -397,11 +421,11 @@ welcome(spy_name,spy_age,spy_salutation,spy_rating)
 #Menu for the spy
 while True:
 	print "+=+=+=+=+=+= SPY MENU =+=+=+=+=+=+=+=+"
-	print "1) Add a status update"
-	print "2) Add a friend"
-	print "3) Send a secret message" 
-	print "4) Read a secret message"
-	print "5) Read chats from a user"
+	print "1) Add a cool status update"
+	print "2) Add a spy friend"
+	print "3) Send a secret message to a spy friend" 
+	print "4) Read a secret message from a spy friend"
+	print "5) Read chat history of a spy friend"
 	print "6) Close application"
 	choice = int(raw_input("Enter your choice: "))
 	print "You chose "+str(choice)
