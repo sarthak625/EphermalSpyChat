@@ -19,12 +19,13 @@ class friend:
 		self.friend_rating = friend_rating
 		global friend_count
 		friend_count+=1
-	# A dictionary to store all the chat records
-	chat_dict = {
-	"message_value": [],
-	"message_time": [],
-	"message_by_me": []
-	}
+		# A dictionary to store all the chat records
+		self.chat_dict = {
+		"message_value": [],
+		"message_time": [],
+		"message_by_me": []
+		}
+		self.words = 0
 
 
 
@@ -156,7 +157,10 @@ def add_friend():
 	"""
 
 	new_friend = friend(friend_name,friend_age,friend_rating)
+	
+	#Append the friend to the friend list
 	friend_list_obj.append(new_friend)
+	
 	print friend_name+" was added successfully. "
 	raw_input("Press enter to continue.")
 	#return len(friend_list["friend_name"])
@@ -193,7 +197,7 @@ def display_friends():
 			print "Name: "+friend_list_obj[i].friend_name
 			print "Age: "+str(friend_list_obj[i].friend_age)
 			print "Rating: "+str(friend_list_obj[i].friend_rating)
-		raw_input("Press enter to continue.")
+		#raw_input("Press enter to continue.")
 	return friend_count	
 
 
@@ -205,9 +209,9 @@ def select_friend():
 	while True:
 		index = int(raw_input("Enter which friend do you want to select: "))
 		#print len(friend_list["friend_name"])
-		print friend_count
+		#print friend_count
 		#if index>len(friend_list["friend_name"]) or index<0:
-		if index>friend_count or index<0:
+		if index>n or index<0:
 			print "There is no Friend "+str(index)+" .You need to try again!"
 		else:
 			break
@@ -220,7 +224,7 @@ def select_friend():
 	print "Rating: "+str(friend_list_obj[index-1].friend_rating)
 
 	raw_input("Press enter to continue.")
-	return index-1
+	return (index-1)
 
 #A function to send an encoded message to a friend
 def send_a_message():
@@ -250,12 +254,13 @@ def send_a_message():
 		print "Sit back and relax spy because this may take a while B-)"
 		Steganography.encode(path, output, message)
 		print "Encoding complete!!"
+
 		#Add the message along with time and boolean value to the chats dictionary
-		friend_list_obj[n-1].chat_dict["message_value"].append(message)
-		friend_list_obj[n-1].chat_dict["message_time"].append(datetime.now().strftime("%H:%M:%S"))		
-		friend_list_obj[n-1].chat_dict["message_by_me"].append(False);
+		friend_list_obj[n].chat_dict["message_value"].append(message)
+		friend_list_obj[n].chat_dict["message_time"].append(datetime.now().strftime("%H:%M:%S"))		
+		friend_list_obj[n].chat_dict["message_by_me"].append(False);
 		raw_input("Press enter to continue.")
-	except IOError:
+	except IOError:		#If the file does not exist
 		print "Oh! Oh! Looks like the file name you provided wasn't quite right. Try Again!!"
 
 
@@ -270,20 +275,56 @@ def read_a_message():
 		confirm = raw_input("Press y to confirm: ")
 		if confirm.lower() == 'y':
 			break
-	print "The secret message from Agent "+friend_list_obj[n-1].friend_name+" is: "
+	print "The secret message from Agent "+friend_list_obj[n].friend_name+" is: "
 	print "Wait for it................"
 	try:
 		secret_text = Steganography.decode(output_image)
 		print "============================================="
 		print secret_text
+		#Count the number of words spoken by the spy
+		friend_list_obj[n].words = secret_text.count(' ')+1 
+		#The number of words spoken by a spy will be equal to the number of whitespaces+1
+
+		#Append the message to the chat dictionary of the friend
+		friend_list_obj[n].chat_dict["message_value"].append(secret_text)
+		friend_list_obj[n].chat_dict["message_time"].append(datetime.now().strftime("%H:%M:%S"))		
+		friend_list_obj[n].chat_dict["message_by_me"].append(True);
+		raw_input("Press enter to continue.")
 	except TypeError:
 		print "The file which you provided is not encrypted."
 	except IOError:
 		print "File not found"
 
-	friend_list_obj[n-1].chat_dict["message_value"].append(secret_text)
-	friend_list_obj[n-1].chat_dict["message_time"].append(datetime.now().strftime("%H:%M:%S"))		
-	friend_list_obj[n-1].chat_dict["message_by_me"].append(True);
+	
+
+#A method to read the entire chat history of a particular friend
+def read_chat():
+	print "Select the friend whose chat ou want to read:  "
+	n = select_friend()
+	if n == -1:			#Function will not run if there are no friends
+		return
+	print "The history of messages by Agent "+friend_list_obj[n].friend_name+" is "
+	print "======================================================"
+	i = 0
+	count = 0
+	for i in range(0,len(friend_list_obj[n].chat_dict["message_value"])):
+		print "--------------- MESSAGE #"+str(i+1)+" ---------------"
+		print "Message : "+friend_list_obj[n].chat_dict["message_value"][i]
+		print "Time : "+friend_list_obj[n].chat_dict["message_time"][i]
+		if friend_list_obj[n].chat_dict["message_by_me"][i]:
+			print "To: Agent "+spy_name
+		else:
+			print "From: Agent "+spy_name
+		print "---------------------------------------------"
+		count+=1
+
+	if count == 0:
+		print "No records could be found" 
+
+	
+
+	raw_input ("Press enter to continue")
+
 
 
 
@@ -381,11 +422,10 @@ while True:
 		send_a_message()
 
 	elif choice == 4:
-		
-		output_image = raw_input("Enter the full path to the output image(eg. D:\\output.jpg): ")
+		read_a_message()
 		
 	elif choice == 5:
-		read_a_message()
+		read_chat()
 		pass
 	elif choice == 6:
 		print "============================"
